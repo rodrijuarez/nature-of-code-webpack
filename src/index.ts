@@ -15,8 +15,8 @@ var sketch = (p: p5) => {
   };
 
   p.draw = () => {
-    var xDistribution = gaussian(400, 16000);
-    var yDistribution = gaussian(400, 800);
+    var xDistribution = gaussian(p.mouseX, 20 * 20);
+    var yDistribution = gaussian(p.mouseY, 20 * 20);
 
     const xPosition = xDistribution.ppf(Math.random());
     const yPosition = yDistribution.ppf(Math.random());
