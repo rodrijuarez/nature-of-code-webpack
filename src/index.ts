@@ -1,8 +1,8 @@
 // Magic for p5 importing properly in TypeScript AND Webpack
 import 'p5';
 var p5 = require('p5');
+const gaussian = require('gaussian');
 
-import './assets/styles/main.scss';
 import './assets/js/p5.dom.js';
 
 var sketch = (p: p5) => {
@@ -11,29 +11,18 @@ var sketch = (p: p5) => {
 
   p.setup = () => {
     (<any>window).p5 = p;
-    canvas = p.createCanvas(400, 400);
-    p.background(100);
-    canvas.drop(gotFile);
+    canvas = p.createCanvas(800, 800);
   };
 
   p.draw = () => {
-    p.fill(p.color(255));
-    p.noStroke();
-    p.textSize(24);
-    p.textAlign(p.CENTER);
-    p.text('Drag an image file onto the canvas.', p.width / 2, p.height / 2);
-    p.noLoop();
-  };
+    var distribution = gaussian(400, 100);
 
-  const gotFile = (file: any) => {
-    if (file.type === 'image') {
-      // Create an image DOM element but don't show it
-      var img = p.createImg(file.data);
-      // Draw the image onto the canvas
-      //p.image(img, 0, 0, p.width, p.height);
-    } else {
-      p.print('Not an image file!');
-    }
+    const result = distribution.ppf(Math.random());
+
+    p.noStroke();
+    let color = p.color(255, 0, 0, 10);
+    p.fill(color);
+    p.ellipse(result, 180, 16, 16);
   };
 };
 
