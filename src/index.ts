@@ -15,14 +15,16 @@ var sketch = (p: p5) => {
   };
 
   p.draw = () => {
-    var distribution = gaussian(400, 100);
+    var xDistribution = gaussian(400, 800);
+    var yDistribution = gaussian(400, 50);
 
-    const result = distribution.ppf(Math.random());
+    const xPosition = xDistribution.ppf(Math.random());
+    const yPosition = yDistribution.ppf(Math.random());
 
     p.noStroke();
     let color = p.color(255, 0, 0, 10);
     p.fill(color);
-    p.ellipse(result, 180, 16, 16);
+    p.ellipse(xPosition, yPosition, 16, 16);
   };
 };
 
