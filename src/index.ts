@@ -22,7 +22,7 @@ var sketch = (p: p5) => {
     const yPosition = yDistribution.ppf(Math.random());
 
     p.noStroke();
-    let color = p.color(255, 0, 0, 10);
+    let color = p.color(255, 0, 0, 100);
     p.fill(color);
     p.ellipse(xPosition, yPosition, 16, 16);
   };
