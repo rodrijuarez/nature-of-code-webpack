@@ -5,14 +5,12 @@ var p5 = require('p5');
 var sketch = (p: p5) => {
   let canvas: any;
 
-  let xSpeeds: number[] = [];
-  let ySpeeds: number[] = [];
-  let xCoordinates: number[] = [];
-  let yCoordinates: number[] = [];
+  let coordinates: p5.Vector[];
+  let speeds: p5.Vector[];
+
+  let defaultSpeed: p5.Vector = p.createVector(1, 3.3);
 
   let numberOfBalls = 50;
-  let xSpeed = 1;
-  let ySpeed = 3.3;
 
   p.preload = () => {};
 
@@ -22,15 +20,13 @@ var sketch = (p: p5) => {
   };
 
   const setupBalls = () => {
-    xCoordinates = Array(numberOfBalls).fill(0);
-    yCoordinates = Array(numberOfBalls).fill(0);
-    xSpeeds = Array(numberOfBalls).fill(xSpeed);
-    ySpeeds = Array(numberOfBalls).fill(ySpeed);
+    coordinates = Array.from(new Array(numberOfBalls), () =>
+      p.createVector(p.random(0, p.width), p.random(0, p.height)),
+    );
 
-    for (let index = 0; index < numberOfBalls; index++) {
-      xCoordinates[index] = p.random(0, p.width);
-      yCoordinates[index] = p.random(0, p.height);
-    }
+    speeds = Array.from(new Array(numberOfBalls), () =>
+      p.createVector(defaultSpeed.x, defaultSpeed.y),
+    );
   };
 
   p.draw = () => {
@@ -42,21 +38,23 @@ var sketch = (p: p5) => {
   };
 
   const calculateBallCoordinates = (index: number) => {
-    xCoordinates[index] += xSpeeds[index];
-    yCoordinates[index] += ySpeeds[index];
+    const coordinate = coordinates[index];
+    const speed = speeds[index];
 
-    if (xCoordinates[index] > p.width || xCoordinates[index] < 0) {
-      xSpeeds[index] = xSpeeds[index] * -1;
+    coordinate.add(speed);
+
+    if (coordinate.x > p.width || coordinate.x < 0) {
+      speed.set(speed.x * -1, speed.y);
     }
 
-    if (yCoordinates[index] > p.height || yCoordinates[index] < 0) {
-      ySpeeds[index] = ySpeeds[index] * -1;
+    if (coordinate.y > p.height || coordinate.y < 0) {
+      speed.set(speed.x, speed.y * -1);
     }
 
     p.stroke(p.color(0));
     p.fill(p.color(175));
 
-    p.ellipse(xCoordinates[index], yCoordinates[index], 16, 16);
+    p.ellipse(coordinate.x, coordinate.y, 16, 16);
   };
 };
 
