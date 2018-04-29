@@ -6,6 +6,8 @@ import './assets/js/p5.dom.js';
 
 var sketch = (p: p5) => {
   let canvas: any;
+  let xoff = 0.0;
+  let yoff = 0.0;
 
   let xCoordinates: number[] = [],
     yCoordinates: number[] = [],
@@ -17,44 +19,19 @@ var sketch = (p: p5) => {
   p.setup = () => {
     (<any>window).p5 = p;
     canvas = p.createCanvas(800, 800);
-
-    cleanCoordinates();
   };
 
   p.draw = () => {
-    for (let i = 0; i < numberOfLines; i++) {
-      const stepSize = p.map(p.noise(t), 0, 1, 0, 10);
-      t++;
-
-      const stepX = p.round(p.random(-stepSize, +stepSize));
-      const stepY = p.round(p.random(-stepSize, +stepSize));
-      xCoordinates[i] += stepX;
-      yCoordinates[i] += stepY;
-
-      p.push();
-      p.strokeWeight(2);
-      p.point(xCoordinates[i], yCoordinates[i]);
-      p.pop();
-    }
-  };
-
-  const cleanCoordinates = () => {
-    for (let i = 0; i < numberOfLines; i++) {
-      xCoordinates[i] = p.width / 2;
-      yCoordinates[i] = p.height / 2;
-    }
-  };
-
-  const montecarlo = (start: number, end: number) => {
-    while (true) {
-      const r1 = p.random(start, end);
-      const probability = r1;
-      const r2 = p.random(start, end);
-
-      if (r2 < probability) {
-        return r1;
+    p.loadPixels();
+    for (let x = 0; x < p.width; x++) {
+      for (let y = 0; y < p.height; y++) {
+        let bright = p.map(p.noise(xoff, yoff), 0, 1, 0, 255);
+        p.pixels[x + y * p.width] = bright;
+        yoff += 0.01;
       }
+      xoff += 0.01;
     }
+    p.updatePixels();
   };
 };
 
