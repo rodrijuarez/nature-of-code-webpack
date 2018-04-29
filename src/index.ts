@@ -2,36 +2,39 @@
 import 'p5';
 var p5 = require('p5');
 
-import './assets/js/p5.dom.js';
-
 var sketch = (p: p5) => {
   let canvas: any;
-  let xoff = 0.0;
-  let yoff = 0.0;
 
-  let xCoordinates: number[] = [],
-    yCoordinates: number[] = [],
-    numberOfLines = 1,
-    t = 0;
+  let xspeed = 1;
+  let yspeed = 3.3;
+
+  let x = 0;
+  let y = 0;
 
   p.preload = () => {};
 
   p.setup = () => {
-    (<any>window).p5 = p;
     canvas = p.createCanvas(800, 800);
   };
 
   p.draw = () => {
-    p.loadPixels();
-    for (let x = 0; x < p.width; x++) {
-      for (let y = 0; y < p.height; y++) {
-        let bright = p.map(p.noise(xoff, yoff), 0, 1, 0, 255);
-        p.pixels[x + y * p.width] = bright;
-        yoff += 0.01;
-      }
-      xoff += 0.01;
+    p.background(p.color(255));
+
+    x += xspeed;
+    y += yspeed;
+
+    if (x > p.width || x < 0) {
+      xspeed = xspeed * -1;
     }
-    p.updatePixels();
+
+    if (y > p.height || y < 0) {
+      yspeed = yspeed * -1;
+    }
+
+    p.stroke(p.color(0));
+    p.fill(p.color(175));
+
+    p.ellipse(x, y, 16, 16);
   };
 };
 
