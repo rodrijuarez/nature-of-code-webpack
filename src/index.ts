@@ -9,7 +9,8 @@ var sketch = (p: p5) => {
 
   let xCoordinates: number[] = [],
     yCoordinates: number[] = [],
-    numberOfLines = 1;
+    numberOfLines = 1,
+    t = 0;
 
   p.preload = () => {};
 
@@ -22,8 +23,8 @@ var sketch = (p: p5) => {
 
   p.draw = () => {
     for (let i = 0; i < numberOfLines; i++) {
-      const stepSize = montecarlo(0, 10);
-      console.log('stepSize', stepSize);
+      const stepSize = p.map(p.noise(t), 0, 1, 0, 10);
+      t++;
 
       const stepX = p.round(p.random(-stepSize, +stepSize));
       const stepY = p.round(p.random(-stepSize, +stepSize));
